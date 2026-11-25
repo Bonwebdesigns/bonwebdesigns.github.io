@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>The hard layouts in AI mockups, built for every screen</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#EDF0F2; --ink:#172230; --muted:#56616F; --rule:#D3D9DF; --blue:#2F5BEA;
+  --forest:#1F3A33; --moss:#5E7F63; --sage:#D9E4DC; --mist:#F4F6F2; --amber:#E2A93B; --body:#3E5A52;
+  --display:"Bricolage Grotesque", system-ui, sans-serif;
+  --text:"IBM Plex Sans", system-ui, sans-serif;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--paper);color:var(--ink);font:400 16px/1.6 var(--text);-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:var(--display);margin:0;line-height:1.08;letter-spacing:-0.01em}
+p{margin:0}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--blue);outline-offset:3px;border-radius:4px}
+
+/* ---------- page chrome ---------- */
+.bar{position:sticky;top:0;z-index:50;background:rgba(237,240,242,.93);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-bottom:1px solid var(--rule)}
+.bar-in{max-width:1400px;margin:0 auto;padding:12px 32px;display:flex;align-items:center;justify-content:space-between;gap:12px 20px;flex-wrap:wrap}
+.by{font-size:.92rem;color:var(--muted)}
+.by strong{color:var(--ink);font-weight:600}
+.controls{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.seg{display:inline-flex;background:#fff;border:1px solid var(--rule);border-radius:999px;padding:3px}
+.seg button,.toggle{font:500 .9rem/1 var(--text);border:0;background:none;color:var(--muted);padding:9px 14px;border-radius:999px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--ink);color:#fff}
+.toggle{border:1px solid var(--rule);background:#fff;color:var(--ink);display:inline-flex;align-items:center;gap:8px;padding:9px 16px}
+.toggle .box{width:12px;height:12px;border:1.5px dashed var(--blue);border-radius:2px}
+.toggle[aria-pressed="true"]{background:var(--blue);border-color:var(--blue);color:#fff}
+.toggle[aria-pressed="true"] .box{border-color:#fff}
+
+.intro{max-width:1400px;margin:0 auto;padding:72px 32px 44px;display:grid;grid-template-columns:minmax(0,1fr) 260px;gap:40px;align-items:end}
+.intro h1{font-size:clamp(2.3rem,4.8vw,4.1rem);font-weight:700;max-width:19ch;letter-spacing:-0.02em}
+.intro p{font-size:1.08rem;color:var(--muted);max-width:62ch;margin-top:22px}
+.intro aside{font-size:.92rem;color:var(--muted);border-left:2px solid var(--blue);padding-left:14px}
+
+main{max-width:1400px;margin:0 auto;padding:0 32px 40px}
+.spec{display:grid;grid-template-columns:minmax(0,1fr) 260px;gap:40px;align-items:start;padding:44px 0;border-top:1px solid var(--rule)}
+.stage{display:flex;justify-content:center;min-width:0}
+.frame{container:site / inline-size;width:var(--frame-w,100%);max-width:100%;background:var(--mist);border:1px solid var(--rule);border-radius:10px;box-shadow:0 18px 40px -26px rgba(23,34,48,.45);transition:width .45s cubic-bezier(.2,.7,.2,1)}
+.frame > section:first-child{border-radius:9px 9px 0 0}
+.frame > section:last-child{border-radius:0 0 9px 9px}
+.frame > section:only-child{border-radius:9px}
+.note{position:sticky;top:88px}
+.note h3{font-size:1.4rem;font-weight:650}
+.note dl{margin:0}
+.note dt{font-weight:600;font-size:.9rem;margin-top:16px}
+.note dd{margin:4px 0 0;color:var(--muted);font-size:.94rem;line-height:1.55}
+
+.foot{max-width:1400px;margin:0 auto;padding:8px 32px 96px}
+.foot > div{border-top:1px solid var(--rule);padding-top:44px;max-width:760px}
+.foot h2{font-size:clamp(1.6rem,2.6vw,2.2rem);font-weight:700}
+.foot p{margin-top:14px;color:var(--muted);font-size:1.05rem}
+.foot .sig{color:var(--ink);font-weight:600}
+
+/* ---------- structure view ---------- */
+[data-box]:not(.is-sticky){position:relative}
+.frame.show [data-box]{outline:1.5px dashed var(--blue);outline-offset:-1.5px}
+.frame.show [data-box]::before{content:attr(data-box);position:absolute;top:0;left:0;z-index:40;font:500 11px/1 var(--text);letter-spacing:.01em;color:#fff;background:var(--blue);padding:5px 7px;border-radius:0 0 4px 0;white-space:nowrap;pointer-events:none}
+.frame.show section[data-box]::before{left:auto;right:0;border-radius:0 0 0 4px}
+
+/* ---------- sample site (inside frames) ---------- */
+.site{color:var(--forest)}
+.wrap{max-width:1040px;margin:0 auto;padding-inline:max(20px,5cqi)}
+.site h2{font-size:clamp(1.7rem,4.4cqi,3rem);font-weight:700;color:var(--forest)}
+.btns{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}
+.btn{display:inline-flex;align-items:center;justify-content:center;font:600 .95rem/1 var(--text);padding:14px 20px;border-radius:6px;background:var(--forest);color:#fff;text-decoration:none}
+.btn.ghost{background:transparent;color:var(--forest);box-shadow:inset 0 0 0 1.5px var(--forest)}
+.ph{position:relative;border-radius:8px;min-height:120px;color:#fff;
+  background:
+    linear-gradient(165deg,rgba(255,255,255,.10),rgba(0,0,0,.22)),
+    repeating-linear-gradient(115deg,rgba(255,255,255,.06) 0 2px,transparent 2px 15px),
+    linear-gradient(135deg,var(--moss),var(--forest));}
+.ph.light{background:
+    linear-gradient(165deg,rgba(255,255,255,.18),rgba(0,0,0,.10)),
+    repeating-linear-gradient(65deg,rgba(255,255,255,.08) 0 2px,transparent 2px 15px),
+    linear-gradient(135deg,#9DB79F,var(--moss));}
+.cap{position:absolute;top:10px;right:10px;font:500 .74rem/1.2 var(--text);background:rgba(255,255,255,.92);color:var(--forest);padding:5px 8px;border-radius:4px;max-width:calc(100% - 20px)}
+
+/* 1. overlapping hero */
+.s-hero{background:var(--mist);padding:clamp(40px,7cqi,88px) 0 48px}
+.hero-grid{display:grid;grid-template-columns:1.05fr 1fr;gap:clamp(24px,4cqi,56px);align-items:center}
+.hero-copy h2{font-size:clamp(2rem,5.2cqi,3.6rem);letter-spacing:-0.02em}
+.hero-copy p{margin-top:18px;font-size:1.05rem;color:var(--body);max-width:44ch}
+.collage{display:grid;grid-template-columns:repeat(6,1fr);grid-template-rows:repeat(6,clamp(42px,6.2cqi,70px))}
+.ph-a{grid-column:1 / 5;grid-row:1 / 6}
+.ph-b{grid-column:4 / 7;grid-row:3 / 7;z-index:2;box-shadow:0 0 0 6px var(--mist)}
+.review{grid-column:1 / 4;grid-row:5 / 7;align-self:end;z-index:3;margin:0 0 -96px 16px;background:#fff;border-radius:8px;padding:16px 18px;box-shadow:0 18px 34px -18px rgba(31,58,51,.55);font-size:.93rem;line-height:1.45}
+.review .stars{color:var(--amber);letter-spacing:2px;font-size:.85rem;display:block;margin-bottom:6px}
+.review b{display:block;margin-top:8px;font-size:.82rem;font-weight:600;color:var(--moss)}
+.s-strip{background:var(--forest);color:var(--sage);padding:80px 0 30px}
+.s-strip .wrap{display:flex;flex-wrap:wrap;gap:8px 28px;align-items:baseline}
+.s-strip strong{color:#fff;font-weight:600}
+
+/* 2. bento */
+.s-bento{background:var(--mist);padding:clamp(40px,7cqi,80px) 0}
+.bento-head{display:flex;justify-content:space-between;align-items:end;gap:16px 32px;flex-wrap:wrap;margin-bottom:28px}
+.bento-head p{max-width:42ch;color:var(--body)}
+.bento{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));grid-auto-rows:minmax(150px,auto);gap:14px}
+.t{border-radius:8px;padding:20px;background:var(--sage);display:flex;flex-direction:column;justify-content:flex-end;gap:6px}
+.t h3{font-size:1.22rem;font-weight:650}
+.t p{font-size:.92rem;color:var(--body)}
+.t-big{grid-column:span 2;grid-row:span 2;padding:0;background:none}
+.t-big .ph{height:100%;min-height:320px;padding:24px;display:flex;flex-direction:column;justify-content:flex-end;gap:6px}
+.t-big h3{font-size:clamp(1.4rem,3cqi,2rem);color:#fff}
+.t-big p{color:#E3ECE5;max-width:36ch}
+.t-wide{grid-column:span 2}
+.t-dark{background:var(--forest)}
+.t-dark h3{color:#fff}
+.t-dark p{color:var(--sage)}
+.t-warm{background:#F2E3BF}
+.num{font-family:var(--display);font-size:clamp(2.4rem,5.4cqi,3.4rem);font-weight:700;line-height:1;color:var(--amber)}
+
+/* 3. full-bleed image */
+.s-bleed{background:#fff;padding:clamp(40px,7cqi,88px) 0}
+.bleed{display:grid;grid-template-columns:[full-start] minmax(20px,1fr) [content-start] minmax(0,520px) [mid] minmax(0,520px) [content-end] minmax(20px,1fr) [full-end]}
+.bleed-img{grid-column:full-start / mid;grid-row:1;min-height:clamp(300px,42cqi,470px);border-radius:0 8px 8px 0}
+.bleed-copy{grid-column:mid / content-end;grid-row:1 / span 2;align-self:center;padding:0 0 0 clamp(24px,5cqi,64px)}
+.bleed-copy p{margin-top:16px;color:var(--body);max-width:46ch}
+.bleed-copy ul{margin:20px 0 0;padding:0;list-style:none;display:grid;gap:10px}
+.bleed-copy li{padding-left:22px;position:relative;font-size:.96rem}
+.bleed-copy li::after{content:"";position:absolute;left:0;top:.62em;width:10px;height:2px;background:var(--amber)}
+.stats{grid-column:content-start / mid;grid-row:2;margin:-44px 28px 0 0;display:flex;background:#fff;border-radius:8px;box-shadow:0 18px 34px -20px rgba(31,58,51,.5);z-index:2}
+.stat{flex:1;padding:16px 18px;border-left:1px solid var(--sage)}
+.stat:first-child{border-left:0}
+.stat strong{display:block;font:700 1.5rem/1.1 var(--display);color:var(--forest)}
+.stat span{font-size:.8rem;color:var(--body)}
+
+/* 4. sticky side column */
+.s-sticky{background:var(--sage);padding:clamp(40px,7cqi,88px) 0}
+.split{display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);gap:clamp(24px,5cqi,64px);align-items:start}
+.is-sticky{position:sticky;top:96px}
+.split-side p{margin-top:16px;color:var(--body);max-width:36ch}
+.qa{display:flex;flex-direction:column;gap:12px}
+.q{background:var(--mist);border-radius:8px;padding:22px 24px}
+.q h3{font-size:1.12rem;font-weight:650}
+.q p{margin-top:8px;color:var(--body);font-size:.95rem}
+
+/* 5. connected steps */
+.s-steps{background:var(--forest);padding:clamp(40px,7cqi,88px) 0}
+.s-steps .site-h{display:flex;justify-content:space-between;align-items:end;gap:16px 32px;flex-wrap:wrap}
+.s-steps h2{color:#fff}
+.s-steps .site-h p{color:var(--sage);max-width:40ch}
+.steps-wrap{margin-top:40px}
+.steps{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:24px;position:relative}
+.steps::after{content:"";position:absolute;top:22px;left:calc((100% - 72px) / 8);right:calc((100% - 72px) / 8);height:2px;background:repeating-linear-gradient(90deg,var(--amber) 0 10px,transparent 10px 16px)}
+.steps li{position:relative;z-index:1;text-align:center}
+.steps .n{width:46px;height:46px;border-radius:50%;margin:0 auto 16px;display:grid;place-items:center;background:var(--forest);border:2px solid var(--amber);font:700 1.05rem/1 var(--display);color:#fff}
+.steps h3{font-size:1.15rem;font-weight:650;color:#fff}
+.steps p{margin-top:6px;font-size:.92rem;color:var(--sage)}
+
+/* ---------- sample site: tablet ---------- */
+@container site (max-width: 900px){
+  .hero-grid{grid-template-columns:1fr}
+  .hero-copy{max-width:560px}
+  .bento{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .t-big{grid-row:span 1}
+  .t-big .ph{min-height:260px}
+  .split{grid-template-columns:minmax(0,1fr) minmax(0,1.2fr)}
+}
+/* ---------- sample site: phone ---------- */
+@container site (max-width: 600px){
+  .collage{grid-template-columns:1fr;grid-template-rows:auto}
+  .ph-a{grid-column:1;grid-row:1;aspect-ratio:4 / 3;min-height:0}
+  .ph-b{display:none}
+  .review{grid-column:1;grid-row:2;margin:-36px 14px -86px}
+  .bento{grid-template-columns:1fr}
+  .t-big,.t-wide{grid-column:auto}
+  .t{min-height:0}
+  .bleed{grid-template-columns:[full-start] 20px [content-start] minmax(0,1fr) [content-end] 20px [full-end]}
+  .bleed-img{grid-column:full-start / full-end;grid-row:1;border-radius:0;min-height:260px}
+  .stats{grid-column:content-start / content-end;grid-row:2;margin:-32px 0 0}
+  .stat{padding:12px}
+  .stat strong{font-size:1.2rem}
+  .bleed-copy{grid-column:content-start / content-end;grid-row:3;padding:28px 0 0}
+  .split{grid-template-columns:1fr}
+  .is-sticky{position:static}
+  .steps{grid-template-columns:1fr;gap:28px}
+  .steps::after{top:23px;bottom:23px;left:22px;right:auto;width:2px;height:auto;background:repeating-linear-gradient(180deg,var(--amber) 0 10px,transparent 10px 16px)}
+  .steps li{text-align:left;padding-left:66px;min-height:46px}
+  .steps .n{position:absolute;left:0;top:0;margin:0}
+}
+
+/* ---------- page chrome: small screens ---------- */
+@media (max-width:1100px){
+  .intro,.spec{grid-template-columns:1fr}
+  .spec{gap:24px}
+  .note{position:static;max-width:680px}
+}
+@media (max-width:760px){
+  .seg{display:none}
+  .bar-in,.intro,main,.foot{padding-inline:16px}
+  .intro{padding-top:44px}
+  .frame{width:100% !important}
+}
+@media (prefers-reduced-motion:reduce){
+  .frame{transition:none}
+  html{scroll-behavior:auto}
+}
+</style>
+</head>
+<body>
+
+<header class="bar">
+  <div class="bar-in">
+    <div class="by"><strong>Bonnie K.</strong>, WordPress developer</div>
+    <div class="controls">
+      <div class="seg" role="group" aria-label="Preview screen size">
+        <button type="button" data-size="desktop" aria-pressed="true">Desktop</button>
+        <button type="button" data-size="tablet" aria-pressed="false">Tablet</button>
+        <button type="button" data-size="phone" aria-pressed="false">Phone</button>
+      </div>
+      <button type="button" class="toggle" id="structure" aria-pressed="false"><span class="box" aria-hidden="true"></span><span class="lbl">Show structure</span></button>
+    </div>
+  </div>
+</header>
+
+<div class="intro">
+  <div>
+    <h1>The hard layouts in AI mockups, built to work on every screen</h1>
+    <p>AI mockups keep reaching for the same five tricky layouts: overlapping photos, uneven grids, images that run off the edge, sticky columns and connected steps. Here's each one built with flex containers and CSS grid, the same structure I use in Elementor. Switch the screen size or turn on the structure view to see how they hold together.</p>
+  </div>
+  <aside>Sample content uses Alder &amp; Stone, a made-up garden studio. The green blocks are photo placeholders, labeled the way I'd mark them for your content.</aside>
+</div>
+
+<main>
+
+  <!-- 1 -->
+  <article class="spec">
+    <div class="stage">
+      <div class="frame site">
+        <section class="s-hero" data-box="Section: 2-column grid">
+          <div class="wrap hero-grid">
+            <div class="hero-copy" data-box="Container: text">
+              <h2>Gardens built for the way you actually live outside</h2>
+              <p>Landscape design and build for homes on the North Shore. One team from the first sketch to the last plant.</p>
+              <div class="btns"><a class="btn" href="#0">Book a site visit</a><a class="btn ghost" href="#0">See recent gardens</a></div>
+            </div>
+            <div class="collage" data-box="Grid: photos share cells">
+              <div class="ph ph-a"><span class="cap">Photo: terrace planting, 4:5</span></div>
+              <div class="ph light ph-b"><span class="cap">Photo: stone path, 1:1</span></div>
+              <div class="review" data-box="Card: negative margin">
+                <span class="stars" aria-label="5 out of 5">★★★★★</span>
+                They turned a muddy slope into the room we use most all summer.
+                <b>Dana R., Lake Forest</b>
+              </div>
+            </div>
+          </div>
+        </section>
+        <section class="s-strip" data-box="Section">
+          <div class="wrap"><strong>Working across</strong><span>Evanston</span><span>Wilmette</span><span>Winnetka</span><span>Glencoe</span><span>Lake Forest</span></div>
+        </section>
+      </div>
+    </div>
+    <aside class="note">
+      <h3>Overlapping hero collage</h3>
+      <dl>
+        <dt>Why it's hard</dt>
+        <dd>Two photos and a review card sit on top of each other and spill into the next section. Built with absolute positioning, it falls apart as soon as the screen gets narrower.</dd>
+        <dt>How it's built</dt>
+        <dd>A 6-column grid where the photos share cells, so they overlap but still flow with the page. The card uses a negative bottom margin, not fixed coordinates.</dd>
+        <dt>On phones</dt>
+        <dd>The second photo drops out and the card tucks under the main photo, so nothing covers the text.</dd>
+      </dl>
+    </aside>
+  </article>
+
+  <!-- 2 -->
+  <article class="spec">
+    <div class="stage">
+      <div class="frame site">
+        <section class="s-bento" data-box="Section">
+          <div class="wrap">
+            <div class="bento-head">
+              <h2>What we do</h2>
+              <p>Most clients start with design and stay with us for the build and the seasons after.</p>
+            </div>
+            <div class="bento" data-box="Grid: 4 columns, tiles span 1 or 2">
+              <article class="t t-big" data-box="Tile: spans 2 by 2">
+                <div class="ph"><span class="cap">Photo: finished garden, landscape</span>
+                  <h3>Garden design</h3>
+                  <p>Scaled plans, planting palettes and 3D views you can walk through before anything gets dug.</p>
+                </div>
+              </article>
+              <article class="t t-wide">
+                <h3>Patios, walls and paths</h3>
+                <p>Local limestone and bluestone, laid to drain properly through a Chicago winter.</p>
+              </article>
+              <article class="t">
+                <h3>Planting</h3>
+                <p>Natives first, chosen for your soil and light.</p>
+              </article>
+              <article class="t t-warm">
+                <h3>Lighting</h3>
+                <p>Warm path and garden lighting on timers.</p>
+              </article>
+              <article class="t t-wide t-dark">
+                <span class="num">140</span>
+                <p>gardens on a seasonal care plan this year</p>
+              </article>
+              <article class="t t-wide">
+                <h3>Water features</h3>
+                <p>Rills, basins and quiet fountains sized for city lots.</p>
+              </article>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+    <aside class="note">
+      <h3>Uneven tile grid</h3>
+      <dl>
+        <dt>Why it's hard</dt>
+        <dd>Tiles of different sizes have to line up edge to edge. Fixed heights leave gaps the moment the text changes length.</dd>
+        <dt>How it's built</dt>
+        <dd>One 4-column grid. Tiles span 1 or 2 columns and rows, and their heights come from the content, not pixel values.</dd>
+        <dt>On tablets and phones</dt>
+        <dd>Drops to 2 columns, then 1. The big tile always stays first.</dd>
+      </dl>
+    </aside>
+  </article>
+
+  <!-- 3 -->
+  <article class="spec">
+    <div class="stage">
+      <div class="frame site">
+        <section class="s-bleed" data-box="Section: full-bleed grid">
+          <div class="bleed">
+            <div class="ph bleed-img" data-box="Image: runs to screen edge"><span class="cap">Photo: garden at dusk, wide</span></div>
+            <div class="bleed-copy" data-box="Container: content width">
+              <h2>One team from first sketch to last plant</h2>
+              <p>Most garden projects pass between a designer, a mason and a nursery. We keep all three under one roof, so the plan you approve is the garden you get.</p>
+              <ul>
+                <li>A designer on site at every stage of the build</li>
+                <li>Stone, plants and lighting on one schedule</li>
+                <li>A three-year guarantee on everything we plant</li>
+              </ul>
+            </div>
+            <div class="stats" data-box="Flex row: overlaps photo">
+              <div class="stat"><strong>18 yrs</strong><span>on the North Shore</span></div>
+              <div class="stat"><strong>600+</strong><span>gardens built</span></div>
+              <div class="stat"><strong>3 yrs</strong><span>plant guarantee</span></div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+    <aside class="note">
+      <h3>Photo that runs off the edge</h3>
+      <dl>
+        <dt>Why it's hard</dt>
+        <dd>The photo runs to the edge of the screen while the text stays lined up with the rest of the page. Most builds either box the photo in or push the text out of line.</dd>
+        <dt>How it's built</dt>
+        <dd>A full-bleed grid with named edge and content columns. The photo spans from the screen edge to the center, and the stats bar overlaps its bottom edge.</dd>
+        <dt>On phones</dt>
+        <dd>The photo goes full width on top, with the stats in a row just under it.</dd>
+      </dl>
+    </aside>
+  </article>
+
+  <!-- 4 -->
+  <article class="spec">
+    <div class="stage">
+      <div class="frame site">
+        <section class="s-sticky" data-box="Section: 2-column grid">
+          <div class="wrap split">
+            <div class="split-side is-sticky" data-box="Sticky column">
+              <h2>Questions we hear first</h2>
+              <p>Most people ask the same six things before booking a visit. Scroll on and the heading stays with you.</p>
+              <div class="btns"><a class="btn" href="#0">Book a site visit</a></div>
+            </div>
+            <div class="qa" data-box="Flex column: scrolls past">
+              <div class="q"><h3>What does a garden design cost?</h3><p>Most design fees fall between $2,500 and $8,000, depending on size. The fee comes off your build if we install it.</p></div>
+              <div class="q"><h3>Can you work with our home builder?</h3><p>Yes. We line up grading, drainage and utilities with your builder so nothing gets dug up twice.</p></div>
+              <div class="q"><h3>When is the best time to start?</h3><p>Plan in winter, build in spring. Late-summer builds work well too and give plants a cooler start.</p></div>
+              <div class="q"><h3>Do you handle permits?</h3><p>We prepare and file permits for walls, patios and lighting wherever your town requires them.</p></div>
+              <div class="q"><h3>How long does a build take?</h3><p>Most gardens take three to six weeks on site once materials arrive.</p></div>
+              <div class="q"><h3>What happens after the build?</h3><p>Every garden gets a first-year visit schedule, and many clients move onto a seasonal care plan.</p></div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+    <aside class="note">
+      <h3>Sticky side column</h3>
+      <dl>
+        <dt>Why it's hard</dt>
+        <dd>The heading stays put while the questions scroll past. It quietly breaks if any parent section hides overflow, which page builders often add by default.</dd>
+        <dt>How it's built</dt>
+        <dd>Sticky positioning on the left column, with overflow left visible on every parent container.</dd>
+        <dt>On phones</dt>
+        <dd>Sticky turns off and the heading sits above the list.</dd>
+      </dl>
+    </aside>
+  </article>
+
+  <!-- 5 -->
+  <article class="spec">
+    <div class="stage">
+      <div class="frame site">
+        <section class="s-steps" data-box="Section">
+          <div class="wrap">
+            <div class="site-h">
+              <h2>How a garden comes together</h2>
+              <p>Four steps, one crew, and a designer you can call at every one of them.</p>
+            </div>
+            <div class="steps-wrap" data-box="List: line drawn in CSS">
+              <ol class="steps">
+                <li><span class="n">1</span><h3>Site visit</h3><p>We walk the property with you and note levels, light and soil.</p></li>
+                <li><span class="n">2</span><h3>Concept plan</h3><p>A scaled plan and planting palette within three weeks.</p></li>
+                <li><span class="n">3</span><h3>Build</h3><p>One crew on one schedule, with a designer on site at each stage.</p></li>
+                <li><span class="n">4</span><h3>Care</h3><p>First-year visits, then seasonal care if you want it.</p></li>
+              </ol>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+    <aside class="note">
+      <h3>Connected process steps</h3>
+      <dl>
+        <dt>Why it's hard</dt>
+        <dd>The line joining the steps has to stay lined up with the circles at every width, and usually ends up as a stretched image.</dd>
+        <dt>How it's built</dt>
+        <dd>A plain numbered list with the line drawn behind it in CSS, so you can add or remove a step without redrawing anything.</dd>
+        <dt>On phones</dt>
+        <dd>It turns into a vertical timeline with the line running down the left.</dd>
+      </dl>
+    </aside>
+  </article>
+
+</main>
+
+<footer class="foot">
+  <div>
+    <h2>In your build</h2>
+    <p>Each of these becomes an Elementor container layout using your global colors, fonts and buttons, saved as a reusable template, with clearly marked spots for your content. This page is plain HTML so you can check it on any device before we start.</p>
+    <p class="sig">Bonnie K., WordPress developer</p>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var sizes = {desktop:'100%', tablet:'820px', phone:'390px'};
+  var sizeBtns = document.querySelectorAll('[data-size]');
+  sizeBtns.forEach(function(b){
+    b.addEventListener('click', function(){
+      sizeBtns.forEach(function(x){ x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
+      document.documentElement.style.setProperty('--frame-w', sizes[b.dataset.size]);
+    });
+  });
+  var t = document.getElementById('structure');
+  t.addEventListener('click', function(){
+    var on = t.getAttribute('aria-pressed') !== 'true';
+    t.setAttribute('aria-pressed', on ? 'true' : 'false');
+    t.querySelector('.lbl').textContent = on ? 'Hide structure' : 'Show structure';
+    document.querySelectorAll('.frame').forEach(function(f){ f.classList.toggle('show', on); });
+  });
+})();
+</script>
+</body>
+</html>
