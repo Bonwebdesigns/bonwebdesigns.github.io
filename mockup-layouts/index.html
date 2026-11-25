@@ -43,17 +43,17 @@ a{color:inherit}
 .intro aside{font-size:.92rem;color:var(--muted);border-left:2px solid var(--blue);padding-left:14px}
 
 main{max-width:1400px;margin:0 auto;padding:0 32px 40px}
-.spec{display:grid;grid-template-columns:minmax(0,1fr) 260px;gap:40px;align-items:start;padding:44px 0;border-top:1px solid var(--rule)}
+.spec{padding:44px 0 52px;border-top:1px solid var(--rule)}
 .stage{display:flex;justify-content:center;min-width:0}
 .frame{container:site / inline-size;width:var(--frame-w,100%);max-width:100%;background:var(--mist);border:1px solid var(--rule);border-radius:10px;box-shadow:0 18px 40px -26px rgba(23,34,48,.45);transition:width .45s cubic-bezier(.2,.7,.2,1)}
 .frame > section:first-child{border-radius:9px 9px 0 0}
 .frame > section:last-child{border-radius:0 0 9px 9px}
 .frame > section:only-child{border-radius:9px}
-.note{position:sticky;top:88px}
-.note h3{font-size:1.4rem;font-weight:650}
-.note dl{margin:0}
-.note dt{font-weight:600;font-size:.9rem;margin-top:16px}
-.note dd{margin:4px 0 0;color:var(--muted);font-size:.94rem;line-height:1.55}
+.note{display:grid;grid-template-columns:minmax(0,15rem) minmax(0,1fr);gap:20px 40px;margin-bottom:28px}
+.note h3{font-size:1.5rem;font-weight:650;max-width:12ch}
+.note dl{margin:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px 32px}
+.note dt{font-weight:600;font-size:.9rem}
+.note dd{margin:4px 0 0;color:var(--muted);font-size:.94rem;line-height:1.55;max-width:40ch}
 
 .foot{max-width:1400px;margin:0 auto;padding:8px 32px 96px}
 .foot > div{border-top:1px solid var(--rule);padding-top:44px;max-width:760px}
@@ -191,9 +191,11 @@ main{max-width:1400px;margin:0 auto;padding:0 32px 40px}
 
 /* ---------- page chrome: small screens ---------- */
 @media (max-width:1100px){
-  .intro,.spec{grid-template-columns:1fr}
-  .spec{gap:24px}
-  .note{position:static;max-width:680px}
+  .intro,.note{grid-template-columns:1fr}
+  .note h3{max-width:none}
+}
+@media (max-width:860px){
+  .note dl{grid-template-columns:1fr;gap:12px}
 }
 @media (max-width:760px){
   .seg{display:none}
@@ -235,6 +237,17 @@ main{max-width:1400px;margin:0 auto;padding:0 32px 40px}
 
   <!-- 1 -->
   <article class="spec">
+    <aside class="note">
+      <h3>Overlapping hero collage</h3>
+      <dl>
+        <div><dt>Why it's hard</dt>
+        <dd>Two photos and a review card sit on top of each other and spill into the next section. Built with absolute positioning, it falls apart as soon as the screen gets narrower.</dd></div>
+        <div><dt>How it's built</dt>
+        <dd>A 6-column grid where the photos share cells, so they overlap but still flow with the page. The card uses a negative bottom margin, not fixed coordinates.</dd></div>
+        <div><dt>On phones</dt>
+        <dd>The second photo drops out and the card tucks under the main photo, so nothing covers the text.</dd></div>
+      </dl>
+    </aside>
     <div class="stage">
       <div class="frame site">
         <section class="s-hero" data-box="Section: 2-column grid">
@@ -260,21 +273,22 @@ main{max-width:1400px;margin:0 auto;padding:0 32px 40px}
         </section>
       </div>
     </div>
-    <aside class="note">
-      <h3>Overlapping hero collage</h3>
-      <dl>
-        <dt>Why it's hard</dt>
-        <dd>Two photos and a review card sit on top of each other and spill into the next section. Built with absolute positioning, it falls apart as soon as the screen gets narrower.</dd>
-        <dt>How it's built</dt>
-        <dd>A 6-column grid where the photos share cells, so they overlap but still flow with the page. The card uses a negative bottom margin, not fixed coordinates.</dd>
-        <dt>On phones</dt>
-        <dd>The second photo drops out and the card tucks under the main photo, so nothing covers the text.</dd>
-      </dl>
-    </aside>
+    
   </article>
 
   <!-- 2 -->
   <article class="spec">
+    <aside class="note">
+      <h3>Uneven tile grid</h3>
+      <dl>
+        <div><dt>Why it's hard</dt>
+        <dd>Tiles of different sizes have to line up edge to edge. Fixed heights leave gaps the moment the text changes length.</dd></div>
+        <div><dt>How it's built</dt>
+        <dd>One 4-column grid. Tiles span 1 or 2 columns and rows, and their heights come from the content, not pixel values.</dd></div>
+        <div><dt>On tablets and phones</dt>
+        <dd>Drops to 2 columns, then 1. The big tile always stays first.</dd></div>
+      </dl>
+    </aside>
     <div class="stage">
       <div class="frame site">
         <section class="s-bento" data-box="Section">
@@ -315,21 +329,22 @@ main{max-width:1400px;margin:0 auto;padding:0 32px 40px}
         </section>
       </div>
     </div>
-    <aside class="note">
-      <h3>Uneven tile grid</h3>
-      <dl>
-        <dt>Why it's hard</dt>
-        <dd>Tiles of different sizes have to line up edge to edge. Fixed heights leave gaps the moment the text changes length.</dd>
-        <dt>How it's built</dt>
-        <dd>One 4-column grid. Tiles span 1 or 2 columns and rows, and their heights come from the content, not pixel values.</dd>
-        <dt>On tablets and phones</dt>
-        <dd>Drops to 2 columns, then 1. The big tile always stays first.</dd>
-      </dl>
-    </aside>
+    
   </article>
 
   <!-- 3 -->
   <article class="spec">
+    <aside class="note">
+      <h3>Photo that runs off the edge</h3>
+      <dl>
+        <div><dt>Why it's hard</dt>
+        <dd>The photo runs to the edge of the screen while the text stays lined up with the rest of the page. Most builds either box the photo in or push the text out of line.</dd></div>
+        <div><dt>How it's built</dt>
+        <dd>A full-bleed grid with named edge and content columns. The photo spans from the screen edge to the center, and the stats bar overlaps its bottom edge.</dd></div>
+        <div><dt>On phones</dt>
+        <dd>The photo goes full width on top, with the stats in a row just under it.</dd></div>
+      </dl>
+    </aside>
     <div class="stage">
       <div class="frame site">
         <section class="s-bleed" data-box="Section: full-bleed grid">
@@ -353,21 +368,22 @@ main{max-width:1400px;margin:0 auto;padding:0 32px 40px}
         </section>
       </div>
     </div>
-    <aside class="note">
-      <h3>Photo that runs off the edge</h3>
-      <dl>
-        <dt>Why it's hard</dt>
-        <dd>The photo runs to the edge of the screen while the text stays lined up with the rest of the page. Most builds either box the photo in or push the text out of line.</dd>
-        <dt>How it's built</dt>
-        <dd>A full-bleed grid with named edge and content columns. The photo spans from the screen edge to the center, and the stats bar overlaps its bottom edge.</dd>
-        <dt>On phones</dt>
-        <dd>The photo goes full width on top, with the stats in a row just under it.</dd>
-      </dl>
-    </aside>
+    
   </article>
 
   <!-- 4 -->
   <article class="spec">
+    <aside class="note">
+      <h3>Sticky side column</h3>
+      <dl>
+        <div><dt>Why it's hard</dt>
+        <dd>The heading stays put while the questions scroll past. It quietly breaks if any parent section hides overflow, which page builders often add by default.</dd></div>
+        <div><dt>How it's built</dt>
+        <dd>Sticky positioning on the left column, with overflow left visible on every parent container.</dd></div>
+        <div><dt>On phones</dt>
+        <dd>Sticky turns off and the heading sits above the list.</dd></div>
+      </dl>
+    </aside>
     <div class="stage">
       <div class="frame site">
         <section class="s-sticky" data-box="Section: 2-column grid">
@@ -389,21 +405,22 @@ main{max-width:1400px;margin:0 auto;padding:0 32px 40px}
         </section>
       </div>
     </div>
-    <aside class="note">
-      <h3>Sticky side column</h3>
-      <dl>
-        <dt>Why it's hard</dt>
-        <dd>The heading stays put while the questions scroll past. It quietly breaks if any parent section hides overflow, which page builders often add by default.</dd>
-        <dt>How it's built</dt>
-        <dd>Sticky positioning on the left column, with overflow left visible on every parent container.</dd>
-        <dt>On phones</dt>
-        <dd>Sticky turns off and the heading sits above the list.</dd>
-      </dl>
-    </aside>
+    
   </article>
 
   <!-- 5 -->
   <article class="spec">
+    <aside class="note">
+      <h3>Connected process steps</h3>
+      <dl>
+        <div><dt>Why it's hard</dt>
+        <dd>The line joining the steps has to stay lined up with the circles at every width, and usually ends up as a stretched image.</dd></div>
+        <div><dt>How it's built</dt>
+        <dd>A plain numbered list with the line drawn behind it in CSS, so you can add or remove a step without redrawing anything.</dd></div>
+        <div><dt>On phones</dt>
+        <dd>It turns into a vertical timeline with the line running down the left.</dd></div>
+      </dl>
+    </aside>
     <div class="stage">
       <div class="frame site">
         <section class="s-steps" data-box="Section">
@@ -424,17 +441,7 @@ main{max-width:1400px;margin:0 auto;padding:0 32px 40px}
         </section>
       </div>
     </div>
-    <aside class="note">
-      <h3>Connected process steps</h3>
-      <dl>
-        <dt>Why it's hard</dt>
-        <dd>The line joining the steps has to stay lined up with the circles at every width, and usually ends up as a stretched image.</dd>
-        <dt>How it's built</dt>
-        <dd>A plain numbered list with the line drawn behind it in CSS, so you can add or remove a step without redrawing anything.</dd>
-        <dt>On phones</dt>
-        <dd>It turns into a vertical timeline with the line running down the left.</dd>
-      </dl>
-    </aside>
+    
   </article>
 
 </main>
