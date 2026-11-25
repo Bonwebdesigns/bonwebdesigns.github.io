@@ -64,8 +64,9 @@ main{max-width:1400px;margin:0 auto;padding:0 32px 40px}
 /* ---------- structure view ---------- */
 [data-box]:not(.is-sticky){position:relative}
 .frame.show [data-box]{outline:1.5px dashed var(--blue);outline-offset:-1.5px}
-.frame.show [data-box]::before{content:attr(data-box);position:absolute;top:0;left:0;z-index:40;font:500 11px/1 var(--text);letter-spacing:.01em;color:#fff;background:var(--blue);padding:5px 7px;border-radius:0 0 4px 0;white-space:nowrap;pointer-events:none}
-.frame.show section[data-box]::before{left:auto;right:0;border-radius:0 0 0 4px}
+.frame.show [data-box]::before{content:attr(data-box);position:absolute;bottom:100%;left:-1.5px;z-index:40;font:500 11px/1 var(--text);letter-spacing:.01em;color:#fff;background:var(--blue);padding:5px 7px;border-radius:4px 4px 0 0;white-space:nowrap;pointer-events:none}
+.frame.show section[data-box]::before{bottom:auto;top:0;left:auto;right:0;border-radius:0 0 0 4px}
+.frame.show [data-box-at="inside"]::before{bottom:0;left:0;border-radius:0 4px 0 0}
 
 /* ---------- sample site (inside frames) ---------- */
 .site{color:var(--forest)}
@@ -298,7 +299,7 @@ main{max-width:1400px;margin:0 auto;padding:0 32px 40px}
               <p>Most clients start with design and stay with us for the build and the seasons after.</p>
             </div>
             <div class="bento" data-box="Grid: 4 columns, tiles span 1 or 2">
-              <article class="t t-big" data-box="Tile: spans 2 by 2">
+              <article class="t t-big" data-box="Tile: spans 2 by 2" data-box-at="inside">
                 <div class="ph"><span class="cap">Photo: finished garden, landscape</span>
                   <h3>Garden design</h3>
                   <p>Scaled plans, planting palettes and 3D views you can walk through before anything gets dug.</p>
